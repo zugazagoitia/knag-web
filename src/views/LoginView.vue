@@ -1,5 +1,13 @@
 <template>
   <div class="my-12">
+    <v-snackbar v-model="snackbar">
+      {{ snackbarText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-spacer></v-spacer>
     <v-card class="mx-auto" max-width="700">
       <v-form @submit.prevent="login">
@@ -58,6 +66,8 @@ export default Vue.extend({
     email: "",
     password: "",
     content: "",
+    snackbar: false,
+    snackbarText: "",
   }),
   computed: {
     ...mapStores(useUserSession),
@@ -71,12 +81,14 @@ export default Vue.extend({
         .then((response) => {
           switch (response.data.status) {
             case 201: {
+              this.snackbar = false;
               this.userSessionStore.login(response as SuccessfulLoginResponse);
               break;
             }
 
             case 212: {
-              //handle email not verified
+              this.snackbarText = "Email not verified";
+              this.snackbar = true;
               break;
             }
           }
@@ -84,9 +96,12 @@ export default Vue.extend({
         })
         .catch((error) => {
           if (error.response.status === 401) {
-            //wrong username/password
+            this.snackbarText = "Invalid credentials";
+            this.snackbar = true;
           }
           console.log(error.response.status);
+          this.snackbarText = "Unexpected error";
+          this.snackbar = true;
           this.content = "error: " + error.toString();
         });
       //paro tuerca
