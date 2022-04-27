@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import auth, {
+import {
   SuccessfulLoginResponse,
   SuccessfulSessionResponse,
-} from "@/logic/auth";
+} from "../logic/auth";
 
 export const useUserSession = defineStore("userSession", {
   state: () => {

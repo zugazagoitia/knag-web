@@ -43,6 +43,24 @@ export default {
 
     return await axios.post(endpoint, loginForm);
   },
+  async register(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    captcha: string
+  ): Promise<ApiResponse> {
+    const endpoint = API_BASE + "/register";
+    const registerForm = {
+      email: email,
+      password: password,
+      name: firstName,
+      surname: lastName,
+      captcha: captcha,
+    };
+
+    return await axios.post(endpoint, registerForm);
+  },
   async getSession(refreshToken: string): Promise<ApiResponse> {
     const endpoint = API_BASE + "/session";
     return await axios.post(endpoint, "", {

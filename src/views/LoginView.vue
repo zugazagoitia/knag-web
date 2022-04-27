@@ -1,98 +1,82 @@
+<script setup lang="ts">
+import auth, { SuccessfulLoginResponse } from "../logic/auth";
+import { useUserSession } from "../store/userSession";
+
+import LoginForm from "../components/LoginForm.vue";
+import AlertMessage from "../components/AlertMessage.vue";
+import { ref } from "vue";
+
+let loading = ref(false);
+let alertShown = ref(false);
+let alertType = ref("error");
+let alertMessage = ref("");
+
+const userSessionStore = useUserSession();
+
+function login(user: { email: string; password: string }) {
+  let responsePromise = auth.login(user.email, user.password);
+  loading.value = true;
+  responsePromise
+    .then((response: { data: { status: any } }) => {
+      switch (response.data.status) {
+        case 201: {
+          userSessionStore.login(response as SuccessfulLoginResponse);
+          loading.value = false;
+          //TODO redirect somewhere?
+          break;
+        }
+
+        case 212: {
+          alertType.value = "info";
+          alertMessage.value = "Email is not verified";
+          alertShown.value = true;
+
+          loading.value = false;
+          break;
+        }
+      }
+    })
+    .catch((error: any) => {
+      alertType.value = "error";
+
+      console.log(error);
+      if (error.response == undefined) {
+        alertMessage.value =
+          "There was a problem while logging you in, please try again later.";
+      } else if (error.response.status === 401) {
+        alertMessage.value = "Wrong credentials";
+      } else if (error.response.status === 429) {
+        alertMessage.value =
+          "There were too many attempts, please try again later";
+      } else {
+        alertMessage.value =
+          "There was a problem while logging you in, please try again later.";
+      }
+
+      alertShown.value = true;
+      loading.value = false;
+    });
+}
+
+function hideAlert() {
+  alertShown.value = false;
+}
+</script>
+
 <template>
   <div class="my-12">
-    <v-spacer></v-spacer>
-    <v-card class="mx-auto" max-width="700">
-      <v-form @submit.prevent="login">
-        <v-container>
-          <v-row align="center" justify="center">
-            <v-col cols="3">
-              <v-img
-                :src="require('../assets/logo.svg')"
-                class="my-2"
-                contain
-                height="128"
-              />
-            </v-col>
-            <v-col cols="6">
-              <v-img
-                :src="require('../assets/name.svg')"
-                class="my-2"
-                contain
-                max-height="80"
-              />
-            </v-col>
-          </v-row>
-          <v-row class="mx-2">
-            <v-col>
-              <v-text-field class="" label="Email" v-model="email">
-              </v-text-field>
-            </v-col>
-          </v-row>
-          <v-row class="mx-2">
-            <v-col>
-              <v-text-field class="" label="Password" v-model="password">
-              </v-text-field>
-            </v-col>
-          </v-row>
-          <v-row class="mx-2 mb-2" justify="end">
-            <v-col md="auto" align-self="end">
-              <v-btn type="submit"> Log-in</v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
-      {{ content }}
-    </v-card>
+    <AlertMessage
+      :alert-message="alertMessage"
+      :alert-shown="alertShown"
+      :alert-type="alertType"
+      @alert-closed="hideAlert"
+    />
+    <LoginForm @form-submitted="login" :loading="loading" />
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-import auth, { SuccessfulLoginResponse } from "@/logic/auth";
-import { useUserSession } from "@/store/userSession";
-import { mapStores } from "pinia";
-
-export default Vue.extend({
-  name: "LoginView",
-  data: () => ({
-    email: "",
-    password: "",
-    content: "",
-  }),
-  computed: {
-    ...mapStores(useUserSession),
-  },
-
-  methods: {
-    login() {
-      let responsePromise = auth.login(this.email, this.password);
-      //tuerca a girar
-      responsePromise
-        .then((response) => {
-          switch (response.data.status) {
-            case 201: {
-              this.userSessionStore.login(response as SuccessfulLoginResponse);
-              break;
-            }
-
-            case 212: {
-              //handle email not verified
-              break;
-            }
-          }
-          this.content = response.toString();
-        })
-        .catch((error) => {
-          if (error.response.status === 401) {
-            //wrong username/password
-          }
-          console.log(error.response.status);
-          this.content = "error: " + error.toString();
-        });
-      //paro tuerca
-    },
-  },
-});
-</script>
-
-<style scoped></style>
+<style scoped>
+AlertMessage {
+  width: 700px;
+}
+</style>
