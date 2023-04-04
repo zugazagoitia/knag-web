@@ -97,19 +97,7 @@ function captchaVerified(response: any) {
 <template>
   <div class="card mx-auto">
     <div class="card-image">
-      <div class="level">
-        <div class="level-item has-text-centered">
-          <figure class="image m-0 px-2">
-            <img class="logo" :src="logo" />
-          </figure>
-        </div>
-        <div class="level-item has-text-centered">
-          <figure class="image m-0 px-2">
-            <img class="name" :src="nameImg" />
-          </figure>
-        </div>
-      </div>
-      <h2 class="title is-2 has-text-centered">Sign up</h2>
+      <h2 class="title is-2 has-text-centered pt-4">Sign up</h2>
     </div>
     <div class="card-content">
       <div class="content">
@@ -218,7 +206,7 @@ function captchaVerified(response: any) {
                 class="button is-success"
                 :disabled="loading"
               >
-                Login
+                Register
               </button>
             </p>
           </div>

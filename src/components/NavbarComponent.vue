@@ -31,7 +31,7 @@ function logout() {
       <div class="navbar-end">
         <div v-if="userSessionStore.isLoggedIn" class="navbar-item">
           <!-- TODO get name and other information -->
-          Welcome <strong>{{ userSessionStore.email }}</strong>
+          Welcome <strong class="px-2">{{ userSessionStore.email }}</strong>
           <div class="buttons">
             <button @click="logout()" class="button is-light">Log out</button>
           </div>

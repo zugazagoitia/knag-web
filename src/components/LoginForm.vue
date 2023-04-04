@@ -49,19 +49,7 @@ function emitLoginEvent() {
 <template>
   <div class="card mx-auto">
     <div class="card-image">
-      <div class="level">
-        <div class="level-item has-text-centered">
-          <figure class="image m-0 px-2">
-            <img class="logo" :src="logo" />
-          </figure>
-        </div>
-        <div class="level-item has-text-centered">
-          <figure class="image m-0 px-2">
-            <img class="name" :src="name" />
-          </figure>
-        </div>
-      </div>
-      <h2 class="title is-2 has-text-centered">Log in</h2>
+      <h2 class="title is-2 has-text-centered pt-4">Log in</h2>
     </div>
     <div class="card-content">
       <div class="content">

@@ -6,9 +6,7 @@ import NavbarComponent from "./components/NavbarComponent.vue";
 <template>
   <NavbarComponent />
 
-  <section class="section align-center">
     <router-view />
-  </section>
 
   <FooterComponent />
 </template>

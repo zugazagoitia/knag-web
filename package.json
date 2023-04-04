@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
-    "bulma": "^0.9.3",
+    "bulma": "^0.9.4",
+    "bulma-block-list": "^0.7.0",
     "pinia": "^2.0.13",
     "sass": "^1.50.1",
     "vue": "^3.2.25",

@@ -19,10 +19,8 @@ function closeAlert() {
       alertType === 'error' && 'is-danger',
       alertType === 'warning' && 'is-warning',
       alertType === 'success' && 'is-success',
-      'notification',
-      'is-light',
     ]"
-    class="notification is-danger is-light"
+    class="notification is-light"
   >
     <button class="delete" @click="closeAlert()"></button>
     {{ alertMessage }}

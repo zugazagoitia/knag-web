@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:8080/v1";
+const API_BASE = import.meta.env.VITE_API_ENDPOINT;
 
 const instance = axios.create({
   baseURL: API_BASE,
@@ -38,7 +38,7 @@ export interface SuccessfulSessionResponse extends ApiResponse {
 
 export default {
   async login(email: string, password: string): Promise<ApiResponse> {
-    const endpoint = API_BASE + "/auth";
+    const endpoint = API_BASE + "/auth/login";
     const loginForm = { email, password };
 
     return await axios.post(endpoint, loginForm);
@@ -50,7 +50,7 @@ export default {
     lastName: string,
     captcha: string
   ): Promise<ApiResponse> {
-    const endpoint = API_BASE + "/register";
+    const endpoint = API_BASE + "/account/register";
     const registerForm = {
       email: email,
       password: password,
@@ -62,7 +62,7 @@ export default {
     return await axios.post(endpoint, registerForm);
   },
   async getSession(refreshToken: string): Promise<ApiResponse> {
-    const endpoint = API_BASE + "/session";
+    const endpoint = API_BASE + "/auth/refresh";
     return await axios.post(endpoint, "", {
       headers: {
         Authorization: "Bearer " + refreshToken,
@@ -70,11 +70,15 @@ export default {
     });
   },
   async logout(refreshToken: string): Promise<ApiResponse> {
-    const endpoint = API_BASE + "/logout";
+    const endpoint = API_BASE + "/auth/logout";
     return await axios.post(endpoint, "", {
       headers: {
         Authorization: "Bearer " + refreshToken,
       },
     });
+  },
+  async verifyEmail(token: string): Promise<ApiResponse> {
+    const endpoint = API_BASE + "/account/verifyEmail/" + token;
+    return await axios.post(endpoint);
   },
 };
