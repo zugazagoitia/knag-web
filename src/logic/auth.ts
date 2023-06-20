@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_ENDPOINT;
+const API_BASE : string = import.meta.env.VITE_API_BASE;
 
 const instance = axios.create({
   baseURL: API_BASE,
