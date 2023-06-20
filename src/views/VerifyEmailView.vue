@@ -14,8 +14,8 @@ const router = useRouter();
 const route = useRoute();
 
 onMounted(async () => {
-
-  let token = route.params.token;
+  // Check if route.params.token is a string, if its an array, convert it to string
+  let token = Array.isArray(route.params.token) ? route.params.token[0] : route.params.token;
   try {
     let success = await checkEmail(token);
     if (success) {

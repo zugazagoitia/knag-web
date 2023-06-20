@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import VueRecaptcha from "vue3-recaptcha2";
 import logo from "../assets/img/logo@0.25x.png";
 import nameImg from "../assets/img/name.svg";
 
 import { onMounted, ref } from "vue";
-import { VueRecaptcha } from "vue-recaptcha";
 
 let captchaSiteKey = import.meta.env.VITE_CAPTCHA_SITE_KEY;
 
@@ -21,7 +21,7 @@ let captchaAbsentAlert = ref(false);
 
 let captchaAbsent = ref(true);
 
-const captchaElement = ref(null);
+const captchaElement = ref<typeof VueRecaptcha | undefined>(undefined);
 
 const props = defineProps({
   loading: {
